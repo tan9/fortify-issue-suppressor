@@ -1,0 +1,33 @@
+build:
+  id: "rcs"
+vulnerabilities:
+  - classInfo:
+      type: "Dynamic Code Evaluation"
+      subtype: "Code Injection"
+  - classInfo:
+      type: "Cross-Site Scripting"
+      subtype: "DOM"
+  - classInfo:
+      type: "Cross-Site Scripting"
+      subtype: "Persistent"
+  - classInfo:
+      type: "Path Manipulation"
+  - classInfo:
+      type: "Access Control"
+      subtype: "Database"
+  - classInfo:
+      type: "Log Forging"
+  - classInfo:
+      type: "Password Management"
+      subtype: "Password in Configuration File"
+  - classInfo:
+      type: "Header Manipulation"
+      classID: "790A125E-5BFE-4931-A51A-29B7D5BECC93"
+  - classInfo:
+      type: "Header Manipulation"
+      subtype: "Cookies"
+  - classInfo:
+      type: "Insecure Randomness"
+  - classInfo:
+      type: "Often Misused"
+      subtype: "File Upload"
