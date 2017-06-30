@@ -1,0 +1,7 @@
+spring:
+  main:
+    banner-mode: "off"
+logging:
+  pattern:
+    console: # suppress console logging
+  file: ./issue-suppressor.log

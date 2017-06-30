@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           xmlns="xmlns://www.fortify.com/schema/audit"
+           targetNamespace="xmlns://www.fortify.com/schema/audit"
+           version="4.3">
+
+    <!-- Notes in this schema refer to confilct resolution.  This applies to both one fpr being merged into another
+        and collabrative audit situations.  I refer to master and import in these comments.  Master refers to values
+        in database and import refers to uploaded value in collab audit situations.  Master refers to opened FPR and
+        import refers to new FPR in client tools. -->
+    <xs:element name="Audit">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ProjectInfo"/>
+                <xs:element ref="IssueList"/>
+                <!-- <xs:any minOccurs="0" maxOccurs="unbounded"/> -->
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:string" use="required"/>
+		</xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="ProjectInfo">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<!-- in collab audit situations this is the name of the FM project to help with one click uploads -->
+				<xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="ProjectVersionName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="ProjectVersionId" type="xs:long" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="WriteDate" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+		</xs:complexType>
+    </xs:element>
+
+    <xs:element name="IssueList">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Issue"  minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="CustomIssue" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="RemovedIssue" minOccurs="0" maxOccurs="unbounded"/>
+	            <!-- <xs:any minOccurs="0" maxOccurs="unbounded"/> -->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Conflict detection is based on the presence of the ClientAuditTrail.  If there are entries in this then
+        the issue has changed since the last download from manager.  A resolution will be required if the revision
+        of the issue is not equal to the revision number found in the Master data source for this instanceID.
+        Resolution will also be required in the case where there are no entries in the "ManagerAuditTrail" in
+        the Master data source (occurs when two FPR's are being merged in a client tool). -->
+
+        <xs:complexType name="IssueBase">
+            <xs:sequence>
+                <xs:element ref="Tag" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="AssignedUser" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="ManagerAuditTrail" type="History" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="ClientAuditTrail" type="History" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="ThreadedComments" minOccurs="0" maxOccurs="1"/>
+                <!-- <xs:any minOccurs="0" maxOccurs="unbounded"/> -->
+            </xs:sequence>
+            <xs:attribute name="instanceId" type="xs:string" use="required"/>
+            <xs:attribute name="suppressed" type="xs:boolean" use="optional"/>
+            <xs:attribute name="hidden" type="xs:boolean" use="optional"/>
+            <xs:attribute name="removed" type="xs:boolean" use="optional"/>
+             <!-- revision is incremented every time a tag is added, removed, or its value is changed
+                    this is only incremented in manager-->
+            <xs:attribute name="revision" type="xs:int" use="required"/>
+        </xs:complexType>
+	<xs:element name="Issue">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="IssueBase">
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CustomIssue">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="IssueBase">
+					<xs:sequence>
+						<xs:element name="Category" type="xs:string" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="File" type="xs:string" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="Line" type="xs:int" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="CreationDate" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="RuleId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    </xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RemovedIssue">
+		 <xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="IssueBase">
+					<xs:sequence>
+						<xs:element name="Category" type="xs:string" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="Product" type="xs:string" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="File" type="xs:string" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="Line" type="xs:int" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="Confidence" type="xs:float" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="Severity" type="xs:float" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="Probability" type="xs:float" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="Accuracy" type="xs:float" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="Impact" type="xs:float" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="RemoveScanDate" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+    <xs:element name="TagHistory">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Tag" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="EditTime" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+                <!-- this will be missing if this entry is the first time this is set -->
+                <xs:element name="OldValue" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                <!-- the username "AutoResolve" will be used when the change occured due to an
+                    import this will also be flaged by the resolve attribute.  If it is not an
+                    auto resolve then the username of the person importing the FPR will be used-->
+                <xs:element name="Username" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+
+            <!-- when an attribute is changed due to a resolve this flag will be set to true.-->
+            <xs:attribute name="resolve" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Tag">
+        <xs:complexType>
+
+            <xs:sequence>
+                <!-- this will be missing if in the the tag is removed from an issue
+                    this is only valid when this element is being used in a TagHistory entry-->
+                <xs:element name="Value" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+            <!-- this is the guid of the tag-->
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+
+    </xs:element>
+
+
+    <xs:complexType name="History">
+        <xs:sequence>
+            <xs:element ref="TagHistory" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="ThreadedComments">
+        <!-- threaded comments are merged based on timestamp, when FPRs diverge the threaded comments will
+            be duplicated so we can reliably merge the comments on timestamp (tools should not adjust existing
+            timestamp so the username, timestamp and content will be equal when merging back in -->
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Comment" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Comment">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Content" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="Username" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="Timestamp" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

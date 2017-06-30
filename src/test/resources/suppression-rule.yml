@@ -1,0 +1,9 @@
+build:
+  id: "rcs"
+vulnerabilities:
+  - classInfo:
+      type: "Access Control"
+      subtype: "Database"
+  - classInfo:
+      type: "Dynamic Code Evaluation"
+      subtype: "Code Injection"
