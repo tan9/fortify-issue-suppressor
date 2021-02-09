@@ -1,9 +1,9 @@
 Fortify Issue Suppressor
 ========================
 
-對 Fortify 結果報告 FPR 檔後續處理的程式，可以透過定義檔將指定的錯誤標註為 `suppressed`。
+Post-processes Fortify analysised FPR files, mark specified issues as `suppressed`.
 
-### 執行指令
+### How to run
 
 ```bash
 ./issue-suppressor.jar --rule rcs-suppression-rule.yml rcs-report.fpr rcs-report-suppressed.fpr
@@ -14,9 +14,9 @@ Fortify Issue Suppressor
 
 ```
 
-### Suppression 規則 YAML
+### Specification of Suppression Rules
 
-範例如下:
+Example:
 
 ```yaml
 build:
