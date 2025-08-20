@@ -2,7 +2,7 @@ package com.cht.fortify.audit;
 
 import com.cht.fortify.rule.SuppressionRule;
 import com.fortify.jaxb.fvdl.Vulnerability;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URL;

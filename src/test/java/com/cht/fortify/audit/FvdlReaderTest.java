@@ -1,7 +1,7 @@
 package com.cht.fortify.audit;
 
 import com.fortify.jaxb.fvdl.FVDL;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.util.zip.ZipFile;

@@ -3,7 +3,8 @@ package com.cht.fortify.audit;
 import com.cht.fortify.rule.SuppressionRule;
 import com.fortify.jaxb.fvdl.FVDL;
 import com.fortify.model.Audit;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ansi.AnsiColor;
 import org.springframework.boot.ansi.AnsiOutput;
@@ -32,13 +33,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipFile;
 
-@Slf4j
 @Component
 @Command(name = "FPR Issue Suppressor",
         description = "Suppress specified issues in Fortify FPR report.",
         footer = "Copyright (c) 2017")
 public class IssueSuppressor implements CommandLineRunner {
 
+    private static final Logger log = LoggerFactory.getLogger(IssueSuppressor.class);
+    
     private static final String DEFAULT_INPUT_FILE = "./report.fpr";
     private static final String DEFAULT_OUTPUT_FILE = "./report-suppressed.fpr";
     private static final String DEFAULT_SUPPRESSION_RULE = "./suppression_rule.yml";
