@@ -2,6 +2,7 @@ spring:
   main:
     banner-mode: "off"
 logging:
-  pattern:
-    console: # suppress console logging
-  file: ./issue-suppressor.log
+  file:
+    name: ./issue-suppressor.log
+  threshold:
+    console: OFF
